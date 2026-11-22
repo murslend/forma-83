@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0c191a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Мой турник">
+  <meta name="description" content="Личный трекер домашних тренировок на 4 недели: турник, отжимания, зарядка и прогресс.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <title>Мой турник · тренировки дома</title>
+<style>
+:root { color-scheme: dark; --bg:#0c191a;--surface:#142627;--surface2:#1c3232;--line:#304546;--text:#f4f6ee;--muted:#a0b2ae;--lime:#c7f36e;--sea:#80d8c3;--yellow:#f9d68e;--black:#102018;--danger:#ffafa4; }
+* { box-sizing:border-box; }
+html { background:var(--bg);scroll-behavior:smooth; }
+body { margin:0; background:linear-gradient(145deg,#0e2321,#0c191a 58%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; min-height:100svh; -webkit-tap-highlight-color:transparent; }
+button,input { font:inherit; }
+button { cursor:pointer; }
+button:focus-visible,input:focus-visible { outline:2px solid var(--lime);outline-offset:3px; }
+.app { max-width:600px;margin:0 auto;padding:0 18px calc(106px + env(safe-area-inset-bottom)); }
+.top { padding:calc(21px + env(safe-area-inset-top)) 0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px; }
+.brand { font-size:14px; font-weight:850;letter-spacing:.16em; color:var(--lime); }
+.sub-brand { color:var(--muted);font-size:12px;margin-top:5px; }
+.icon-button { width:44px;height:44px;border-radius:15px;background:var(--surface2);border:1px solid var(--line);color:var(--text);font-size:21px; }
+.hero { padding:25px 22px 23px;position:relative;overflow:hidden;border-radius:28px;background:radial-gradient(circle at 90% 5%,#385b47 1%,transparent 52%),linear-gradient(145deg,#22372f,#183331);border:1px solid #38554d; }
+.eyebrow { font-size:12px;color:var(--sea);font-weight:800;letter-spacing:.11em;text-transform:uppercase; }
+h1 { font-size:clamp(29px,9vw,41px);letter-spacing:-.045em;line-height:1.07;margin:10px 0 9px; }
+.hero p { color:#c1d2c7;font-size:14px;margin:0;line-height:1.5;max-width:85%; }
+.hero-stats { display:flex;gap:9px;margin-top:22px; }
+.hero-stats div { background:#142a2785;border:1px solid #688e7542;border-radius:13px;padding:10px 12px;flex:1; }
+.hero-stats strong {font-size:23px;display:block;color:var(--lime);line-height:1.1;}
+.hero-stats span{display:block;font-size:11px;color:#b4cabc;margin-top:4px}
+.week-switch {display:flex; gap:7px;margin:19px 0 15px;}
+.week-switch button {flex:1;min-width:0;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--muted);font-size:13px;font-weight:800;padding:11px 4px;}
+.week-switch button.active{background:var(--lime);border-color:var(--lime);color:#102016;}
+.days {display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:0 0 18px;}
+.day { background:var(--surface);border:1px solid var(--line);color:var(--muted);border-radius:14px;min-width:0;min-height:68px;padding:8px 1px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;}
+.day b {font-size:10px;text-transform:uppercase;letter-spacing:.03em;}
+.day span{font-size:16px;font-weight:750;color:var(--text);}
+.day i{width:6px;height:6px;background:#46625c;border-radius:99px;}
+.day.done i{background:var(--lime)}
+.day.active{border-color:var(--lime);background:#274034;}
+.day.active span{color:var(--lime)}
+.day:disabled{opacity:.6}
+.section-head {display:flex;justify-content:space-between;gap:10px;align-items:center;margin:22px 0 11px;}
+h2{font-size:20px;letter-spacing:-.025em;margin:0;}
+.small {color:var(--muted);font-size:12px;line-height:1.45;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:17px;margin:0 0 11px;}
+.card-top{display:flex;gap:12px;align-items:center;justify-content:space-between;}
+.card-top h3{font-size:17px;margin:0;line-height:1.3;}
+.card-top p{margin:5px 0 0;font-size:12px;color:var(--muted);}
+.pill {color:var(--black);background:var(--lime);font-size:11px;font-weight:850;border-radius:99px;padding:7px 10px;white-space:nowrap;}
+.pill.muted {background:#28423f;color:var(--sea)}
+.checkrow{display:flex;align-items:center;gap:13px;min-height:48px;cursor:pointer;user-select:none;}
+.checkrow + .checkrow{border-top:1px solid var(--line);}
+.checkrow span.copy{flex:1;font-size:14px;line-height:1.3;}
+input[type=checkbox]{appearance:none;-webkit-appearance:none;width:26px;height:26px;min-width:26px;border-radius:9px;border:1.5px solid #749087;background:#142829;margin:0;display:grid;place-items:center;}
+input[type=checkbox]:checked{background:var(--lime);border-color:var(--lime)}
+input[type=checkbox]:checked:after{content:'✓';font-weight:900;color:#163224;font-size:17px}
+.checkrow:has(input:checked) .copy{color:#b6cbc0;}
+.minihint{font-size:12px;color:var(--muted);line-height:1.5;margin-top:12px;}
+.details{font-size:13px;color:var(--sea);cursor:pointer;margin-top:13px;}
+.details-content{font-size:13px;color:#cfddd5;line-height:1.8;padding:8px 2px 1px;}
+.ex{padding:17px 16px 16px;}
+.ex .caption{display:flex;align-items:start;justify-content:space-between;gap:6px;}
+.ex .caption strong{font-size:15px;}
+.ex .caption small{font-size:12px;color:var(--muted);display:block;margin-top:5px;}
+.sets{display:flex;gap:8px;justify-content:space-between;margin-top:14px;}
+.set{flex:1;background:#0f2120;border-radius:13px;border:1px solid #2b4641;padding:7px 4px;text-align:center;min-width:0;}
+.set label{display:block;font-size:10px;color:#9aafa6;margin-bottom:5px;}
+.controls{display:flex;align-items:center;justify-content:space-around;gap:1px;}
+.controls button{width:30px;height:32px;padding:0;border:0;background:transparent;color:var(--sea);font-size:22px;font-weight:600;touch-action:manipulation;}
+.controls .num{font-size:18px;font-weight:850;min-width:22px;text-align:center;font-variant-numeric:tabular-nums;}
+.controls button:active{color:var(--lime)}
+.exercise-unit{font-size:11px;color:var(--muted);margin-top:5px}
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.form-grid label {display:block;font-size:11px;color:var(--muted);margin-bottom:6px;}
+.field{background:#0e2121;color:var(--text);border:1px solid var(--line);border-radius:11px;width:100%;padding:12px 10px;font-size:17px;outline:none;min-width:0;}
+.field:focus{border-color:var(--lime)}
+.full{width:100%}
+button.primary{border:0;border-radius:13px;background:var(--lime);color:var(--black);font-size:14px;font-weight:850;padding:14px 16px;}
+button.secondary{border:1px solid #47766b;border-radius:13px;background:#1f3c36;color:var(--text);font-size:14px;font-weight:750;padding:13px 15px;}
+button.danger{color:#ffd0c9;border:1px solid #a05e57;background:#422b2a;border-radius:13px;padding:13px 15px;font-weight:750;}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;}
+.kpi strong{display:block;font-size:32px;letter-spacing:-.04em;color:var(--lime);}
+.kpi span{display:block;color:var(--muted);font-size:12px;margin-top:5px;}
+.bar-label{display:flex;align-items:center;justify-content:space-between;font-size:13px;margin-bottom:7px;gap:10px;}
+.bar-track{height:10px;border-radius:99px;background:#243b39;overflow:hidden;margin-bottom:18px;}
+.bar-fill{height:100%;background:linear-gradient(90deg,#77d6c0,var(--lime));border-radius:99px;min-width:0;transition:width .2s ease;}
+.week-card{display:flex;gap:12px;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--line);}
+.week-card:last-child{border-bottom:0;}
+.week-card b{font-size:14px;display:block;}
+.week-card p{margin:4px 0 0;color:var(--muted);font-size:12px;}
+.week-card strong{font-size:18px;color:var(--lime);}
+.smallnote{color:var(--muted);font-size:12px;line-height:1.55;margin-top:10px;}
+.mood{display:flex;gap:7px;margin-top:9px;}
+.mood button{flex:1;background:#102523;border:1px solid var(--line);color:var(--muted);border-radius:12px;padding:10px 4px;font-size:18px;}
+.mood button.active{background:#334e3e;border-color:var(--lime);color:var(--lime);}
+.footer-nav {position:fixed;left:0;right:0;bottom:0;background:#0f201ff2;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);padding:11px max(18px,calc((100vw - 600px)/2 + 18px)) calc(10px + env(safe-area-inset-bottom));z-index:10;display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+.nav{background:transparent;border:0;border-radius:13px;color:#91aaa3;padding:8px 5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;font-weight:700;}
+.nav .emoji{font-size:22px;}
+.nav.active{background:#274137;color:var(--lime);}
+.hidden {display:none !important;}
+.toast{position:fixed;bottom:calc(91px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#d4ff9b;color:#12251a;border-radius:12px;padding:10px 16px;font-weight:750;font-size:13px;z-index:12;box-shadow:0 9px 30px #0008;opacity:0;pointer-events:none;transition:opacity .25s;white-space:nowrap;max-width:90%;}
+.toast.on{opacity:1;}
+@media(min-width:650px){.app{padding-left:24px;padding-right:24px;}.footer-nav{max-width:600px;margin:auto;border-left:1px solid var(--line);border-right:1px solid var(--line);}}
+@media(max-width:360px){.app{padding-left:12px;padding-right:12px}.set{padding:7px 2px}.controls button{width:25px}.hero{padding:22px 17px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top"><div><div class="brand">МОЙ ТУРНИК<span aria-hidden="true"> ●</span></div><div class="sub-brand">23 ноября — 20 декабря 2026</div></div><button class="icon-button" type="button" id="settingsButton" aria-label="Настройки">⚙</button></header>
+  <div id="todayView">
+    <section class="hero"><div class="eyebrow" id="heroWeek">НЕДЕЛЯ 1 / 4</div><h1 id="heroTitle">Сегодня — твой день</h1><p id="heroSub">План на день, зарядка и прогресс в одном месте.</p><div class="hero-stats"><div><strong id="heroCharges">0/28</strong><span>дней с зарядкой</span></div><div><strong id="heroTrainings">0/12</strong><span>силовых тренировок</span></div></div></section>
+    <div class="week-switch" id="weekSwitch" aria-label="Выбор недели"></div>
+    <div class="days" id="daySelect" aria-label="Выбор дня"></div>
+    <div class="section-head"><h2 id="dayHeading">Понедельник</h2><span class="pill" id="dayBadge">СИЛОВАЯ</span></div>
+    <section class="card">
+      <div class="card-top"><div><h3>Утренняя зарядка</h3><p>10–12 минут · каждый день</p></div><span class="pill muted">ЕЖЕДНЕВНО</span></div>
+      <label class="checkrow" style="margin-top:12px"><input type="checkbox" id="chargeCheck"><span class="copy"><b>Зарядка выполнена</b></span></label>
+      <details class="details"><summary>Посмотреть состав зарядки</summary><div class="details-content">Ходьба на месте — 1 минута<br>Круги плечами и руками — по 10–15 раз<br>Повороты и наклоны корпуса — по 10 раз<br>Приседания — 15 раз<br>Лёгкие отжимания — 8–10 раз<br>«Птица-собака» — по 8 раз<br>Подъёмы на носки — 20 раз</div></details>
+    </section>
+    <div class="section-head"><h2 id="planTitle">Тренировка</h2><span id="planDuration" class="small">35–40 мин</span></div>
+    <div id="planDesc" class="small" style="margin:-3px 0 12px"></div>
+    <div id="exerciseList"></div>
+    <section class="card" id="activityCard"><label class="checkrow"><input type="checkbox" id="activityCheck"><span class="copy"><b id="activityLabel">Основная активность выполнена</b><small style="display:block;color:var(--muted);margin-top:3px" id="activitySubtitle">Отметь после занятия</small></span></label></section>
+    <div class="section-head"><h2>Самочувствие</h2><span class="small">По желанию</span></div>
+    <section class="card"><div class="form-grid"><div><label for="stepsInput">Шаги</label><input id="stepsInput" class="field" type="number" inputmode="numeric" min="0" max="100000" placeholder="8000"></div><div><label for="sleepInput">Сон, ч</label><input id="sleepInput" class="field" type="number" inputmode="decimal" step="0.5" min="0" max="24" placeholder="7.5"></div><div><label for="weightInput">Вес, кг</label><input id="weightInput" class="field" type="number" inputmode="decimal" step="0.1" min="25" max="400" placeholder="—"></div></div><p class="minihint">Как себя чувствуешь сегодня?</p><div class="mood" id="moodButtons" aria-label="Самочувствие по шкале от одного до пяти"></div><div style="margin-top:14px"><label for="noteInput" class="small">Комментарий</label><input id="noteInput" class="field full" placeholder="Например: болели предплечья" maxlength="200" style="font-size:14px;margin-top:6px"></div></section>
+  </div>
+  <div id="progressView" class="hidden">
+    <section class="hero"><div class="eyebrow">ТВОЯ СТАТИСТИКА</div><h1>Прогресс<br>за 4 недели</h1><p>Результаты считаются автоматически из отметок и фактически выполненных подходов.</p></section>
+    <div class="section-head"><h2>Общий результат</h2></div><div class="kpis" id="kpiList"></div>
+    <div class="section-head"><h2>Выполнение плана</h2></div><div class="card" id="planBars"></div>
+    <div class="section-head"><h2>По неделям</h2></div><div class="card" id="weekResults"></div>
+    <div class="section-head"><h2>Личные рекорды</h2></div><section class="card"><p class="small">Исходные данные: ≈ 6 подтягиваний и 30 отжиманий за подход. Новые максимумы можно вносить по неделям, только если есть желание и восстановление позволяет.</p><div id="testInputs"></div></section>
+    <div class="section-head"><h2>Последние записи</h2></div><div class="card" id="lastRecords"></div>
+  </div>
+  <div id="settingsView" class="hidden">
+    <section class="hero"><div class="eyebrow">НАСТРОЙКИ</div><h1>Твои записи</h1><p>Данные хранятся только в этом браузере. Экспорт помогает сохранить их на случай смены телефона или очистки Safari.</p></section>
+    <div class="section-head"><h2>Резервная копия</h2></div><section class="card"><p class="small" style="margin-top:0">Сохрани файл в «Файлы» → iCloud Drive. Из него можно восстановить все отметки и подходы.</p><div class="actions"><button class="primary" id="exportButton" type="button">↓ Сохранить</button><button class="secondary" id="importButton" type="button">↑ Восстановить</button></div><input id="importFile" type="file" accept="application/json,.json" style="display:none"><p class="minihint">Экспорт содержит показатели тренировок, сна, веса и самочувствия. Храни файл в защищённом месте.</p></section>
+    <div class="section-head"><h2>О программе</h2></div><section class="card"><p class="small" style="margin-top:0">3 силовые тренировки: понедельник, среда, суббота. Остальные дни — восстановление. Уровень: около 6 подтягиваний, 30 отжиманий.</p><p class="small">Все упражнения выполняются без отказа. При боли в суставе, головокружении или необычной одышке прекрати занятие. Не выполняй подтягивания рывком.</p><p class="small">Чтобы сделать значок на экране iPhone, размести этот сайт по HTTPS, открой в Safari и выбери «Поделиться» → «На экран Домой».</p><button class="danger full" id="resetButton" type="button">Стереть все отметки</button></section>
+  </div>
+</div>
+<nav class="footer-nav" aria-label="Разделы"><button class="nav active" data-view="today" type="button"><span class="emoji">⌂</span>Мой день</button><button class="nav" data-view="progress" type="button"><span class="emoji">▥</span>Прогресс</button><button class="nav" data-view="settings" type="button"><span class="emoji">⚙</span>Настройки</button></nav>
+<div class="toast" id="toast" role="status" aria-live="polite">Сохранено</div>
+<script>
+(()=>{'use strict';
+const KEY='moy-turnik-v1';
+const START='2026-11-23';
+const weekdays=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+const daynames=['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'];
+const ex=(id,name,sets,target,unit='раз')=>({id,name,sets,target,unit});
+const workouts={
+0:{kind:'strength',label:'Верх тела и турник',duration:'35–40 мин',desc:'Разминка 5–7 минут. Подтягивания — без рывков, с запасом 1–2 повтора.',exercises:[ex('pull','Подтягивания',3,[3,4,4,5]),ex('push','Отжимания',3,[12,13,14,15]),ex('squat','Приседания',3,[12,14,15,16]),ex('plank','Планка',3,[25,30,35,40],'сек'),ex('bridge','Ягодичный мост',2,[15,15,16,16])]},
+1:{kind:'recovery',label:'Ходьба и мобильность',duration:'30–45 мин',desc:'Прогулка в комфортном или умеренно быстром темпе. Мягкая разминка суставов 5–8 минут.',exercises:[]},
+2:{kind:'strength',label:'Ноги, корпус и лёгкий турник',duration:'35–45 мин',desc:'Нагрузка на турник снижена. Для выпадов и «мёртвого жука» записывай повторения на одну сторону.',exercises:[ex('squat','Приседания',3,[15,16,17,18]),ex('lunge','Выпады назад',3,[8,9,9,10],'на ногу'),ex('push','Отжимания',3,[10,11,12,13]),ex('pull','Подтягивания',2,[3,3,4,4]),ex('bridge','Ягодичный мост',3,[15,16,17,18]),ex('deadbug','Мёртвый жук',3,[8,9,10,10],'на сторону')]},
+3:{kind:'recovery',label:'Активное восстановление',duration:'30–40 мин',desc:'Прогулка без интенсивной нагрузки. Если есть усталость — сократи продолжительность.',exercises:[]},
+4:{kind:'recovery',label:'Лёгкий день',duration:'30–40 мин',desc:'Мобильность плеч, таза и голеностопа, спокойная прогулка. Без подтягиваний до отказа.',exercises:[]},
+5:{kind:'strength',label:'Всё тело и турник',duration:'40–45 мин',desc:'Разминка 5–7 минут. Старайся сохранять одинаково качественную технику во всех подходах.',exercises:[ex('pull','Подтягивания',3,[3,4,4,5]),ex('push','Отжимания',3,[12,13,14,15]),ex('step','Зашагивания на устойчивую опору',3,[8,9,10,10],'на ногу'),ex('squat','Приседания',3,[15,16,18,18]),ex('sideplank','Боковая планка',2,[20,25,30,35],'сек/стор.'),ex('bird','Птица-собака',2,[8,9,10,10],'на сторону')]},
+6:{kind:'rest',label:'Отдых и прогулка',duration:'20–40 мин',desc:'По желанию — спокойная прогулка. Силовой нагрузки сегодня нет.',exercises:[]}
+};
+const empty=()=>({version:1,days:{},tests:{}});
+let data;
+let storageAvailable=true;
+try{data=JSON.parse(localStorage.getItem(KEY)||'null')||empty();if(!data||typeof data!=='object'||!data.days||!data.tests)throw Error('format');localStorage.setItem(KEY,JSON.stringify(data));}catch(e){data=empty();try{localStorage.setItem(KEY,JSON.stringify(data));}catch(_){storageAvailable=false;}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){storageAvailable=false;toast('Сохранение недоступно — сделай экспорт');}}
+let toastTimeout;function toast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('on');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>el.classList.remove('on'),2300);}
+function dateFor(index){const d=new Date('2026-11-23T12:00:00');d.setDate(d.getDate()+index);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function dateString(index){const d=new Date(`${dateFor(index)}T12:00:00`);return `${d.getDate()} ${['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'][d.getMonth()]}`;}
+function indexForToday(){const now=new Date();const k=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;const n=Math.round((Date.parse(`${k}T12:00:00`)-Date.parse(`${START}T12:00:00`))/86400000);return Math.max(0,Math.min(27,n));}
+let selected=indexForToday();let view='today';
+const $=id=>document.getElementById(id);
+const getDay=(n)=>data.days[dateFor(n)]||{};
+const editDay=(n)=>data.days[dateFor(n)]||(data.days[dateFor(n)]={});
+function stat(){let charges=0,strength=0,pulls=0,pushes=0,steps=0,active=0;for(let i=0;i<28;i++){const d=getDay(i);const w=workouts[i%7];if(d.charge)charges++;if(w.kind==='strength'&&d.activity)strength++;if(d.activity)active++;steps+=Number(d.steps)||0;for(const x of w.exercises){const r=(d.sets||{})[x.id]||[];let sum=r.reduce((a,b)=>a+(Number(b)||0),0);if(x.id==='pull')pulls+=sum;if(x.id==='push')pushes+=sum;}}return {charges,strength,pulls,pushes,steps,active};}
+function isComplete(i){const d=getDay(i);return !!(d.charge&&((workouts[i%7].kind==='rest')||d.activity));}
+function renderSwitcher(){const wi=Math.floor(selected/7);$('weekSwitch').innerHTML=[0,1,2,3].map(w=>`<button data-week="${w}" class="${w===wi?'active':''}" aria-pressed="${w===wi}">Нед. ${w+1}</button>`).join('');$('daySelect').innerHTML=Array.from({length:7},(_,d)=>{const i=wi*7+d;return `<button class="day ${i===selected?'active':''} ${isComplete(i)?'done':''}" data-day="${i}" aria-pressed="${i===selected}"><b>${weekdays[d]}</b><span>${Number(dateFor(i).slice(-2))}</span><i aria-hidden="true"></i></button>`;}).join('');}
+function renderToday(){const day=selected%7,w=Math.floor(selected/7),plan=workouts[day],current=getDay(selected),s=stat();$('heroWeek').textContent=`НЕДЕЛЯ ${w+1} / 4`;$('heroTitle').textContent=`${daynames[day]}`;$('heroSub').textContent=`${dateString(selected)} · ${plan.label}. Отмечай сделанное в течение дня.`;$('heroCharges').textContent=`${s.charges}/28`;$('heroTrainings').textContent=`${s.strength}/12`;renderSwitcher();$('dayHeading').textContent=`${dateString(selected)}`;$('dayBadge').textContent=plan.kind==='strength'?'СИЛОВАЯ':plan.kind==='rest'?'ОТДЫХ':'ВОССТАНОВЛЕНИЕ';$('dayBadge').className=`pill ${plan.kind!=='strength'?'muted':''}`;$('chargeCheck').checked=!!current.charge;$('activityCheck').checked=!!current.activity;$('planTitle').textContent=plan.label;$('planDuration').textContent=plan.duration;$('planDesc').textContent=plan.desc;$('activityLabel').textContent=plan.kind==='strength'?'Силовая тренировка выполнена':plan.kind==='recovery'?'Прогулка / восстановление выполнены':'Прогулка выполнена (необязательно)';$('activitySubtitle').textContent=plan.kind==='strength'?'Отмечай после последнего упражнения':'Отметь, если сегодня была активность';$('exerciseList').innerHTML=plan.exercises.length?plan.exercises.map(x=>{const target=x.target[w];const values=(current.sets||{})[x.id]||[];return `<section class="card ex"><div class="caption"><div><strong>${x.name}</strong><small>${x.sets} подхода · цель ${target} ${x.unit}</small></div><span class="pill muted">${x.sets} × ${target}</span></div><div class="sets">${Array.from({length:x.sets},(_,i)=>`<div class="set"><label>Подход ${i+1}</label><div class="controls"><button type="button" data-ex="${x.id}" data-set="${i}" data-delta="-1" aria-label="Убавить результат">−</button><span class="num">${values[i]===undefined?'–':values[i]}</span><button type="button" data-ex="${x.id}" data-set="${i}" data-delta="1" aria-label="Добавить результат">+</button></div><div class="exercise-unit">${x.unit}</div></div>`).join('')}</div></section>`;}).join(''):`<div class="card"><div class="card-top"><div><h3>Сегодня без силовой</h3><p>Восстановление — часть тренировочного плана.</p></div><span class="pill muted">✓</span></div></div>`;$('stepsInput').value=current.steps??'';$('sleepInput').value=current.sleep??'';$('weightInput').value=current.weight??'';$('noteInput').value=current.note??'';$('moodButtons').innerHTML=[1,2,3,4,5].map(n=>`<button type="button" class="${Number(current.mood)===n?'active':''}" data-mood="${n}" aria-label="Самочувствие ${n} из 5" aria-pressed="${Number(current.mood)===n}">${['😣','😕','😐','🙂','😃'][n-1]}</button>`).join('');}
+function renderProgress(){const s=stat();$('kpiList').innerHTML=[[''+s.strength+' / 12','Силовые'],[''+s.charges+' / 28','Зарядка'],[s.pulls,'Подтягиваний всего'],[s.pushes,'Отжиманий всего'],[s.steps.toLocaleString('ru-RU'),'Шагов записано'],[s.active,'Активных дней']].map(x=>`<div class="kpi"><strong>${x[0]}</strong><span>${x[1]}</span></div>`).join('');const chargeP=s.charges/28*100,strengthP=s.strength/12*100;$('planBars').innerHTML=[['Утренняя зарядка',s.charges,28,chargeP],['Силовые тренировки',s.strength,12,strengthP]].map(a=>`<div class="bar-label"><span>${a[0]}</span><strong>${a[1]} из ${a[2]}</strong></div><div class="bar-track"><div class="bar-fill" style="width:${a[3].toFixed(2)}%"></div></div>`).join('')+'<p class="smallnote">Показатели отражают внесённые отметки. Пропущенные записи не считаются выполненными.</p>';
+$('weekResults').innerHTML=Array.from({length:4},(_,w)=>{let c=0,t=0,p=0,st=0;for(let d=0;d<7;d++){const idx=w*7+d,day=getDay(idx),plan=workouts[d];if(day.charge)c++;if(plan.kind==='strength'&&day.activity)t++;st+=Number(day.steps)||0;p+=((day.sets||{}).pull||[]).reduce((a,b)=>a+(Number(b)||0),0)}return `<div class="week-card"><div><b>Неделя ${w+1}</b><p>Зарядка ${c}/7 · Силовые ${t}/3</p><p>Шаги: ${st.toLocaleString('ru-RU')}</p></div><div style="text-align:right"><strong>${p}</strong><p>подтягиваний</p></div></div>`}).join('');$('testInputs').innerHTML=Array.from({length:4},(_,w)=>{const d=data.tests[String(w+1)]||{};return `<div class="week-card"><div><b>Неделя ${w+1}</b><p>Максимум за один подход</p></div><div style="display:flex;gap:7px;max-width:55%"><label style="font-size:10px;color:var(--muted)">Турник<input class="field test" type="number" inputmode="numeric" min="0" max="100" data-week="${w+1}" data-kind="pull" value="${d.pull??''}" placeholder="6" aria-label="Подтягивания за неделю ${w+1}"></label><label style="font-size:10px;color:var(--muted)">Отжимания<input class="field test" type="number" inputmode="numeric" min="0" max="300" data-week="${w+1}" data-kind="push" value="${d.push??''}" placeholder="30" aria-label="Отжимания за неделю ${w+1}"></label></div></div>`}).join('');
+const recent=[];for(let i=27;i>=0;i--){const d=getDay(i);if(d.charge||d.activity||(d.sets&&Object.keys(d.sets).length)){recent.push(`<div class="week-card"><div><b>${dateString(i)}</b><p>${workouts[i%7].label}</p></div><div><strong>${d.activity?'✓':d.charge?'☀':'•'}</strong></div></div>`);if(recent.length===6)break;}}$('lastRecords').innerHTML=recent.join('')||'<p class="small">Записей пока нет. Выбери день и отметь выполненное занятие.</p>';}
+function switchView(next){view=next;for(const v of ['today','progress','settings'])$(v+'View').classList.toggle('hidden',v!==next);document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.view===next));if(next==='today')renderToday();if(next==='progress')renderProgress();window.scrollTo({top:0,behavior:'instant'});}
+$('weekSwitch').addEventListener('click',e=>{const b=e.target.closest('button[data-week]');if(!b)return;selected=Number(b.dataset.week)*7+(selected%7);renderToday();});
+$('daySelect').addEventListener('click',e=>{const b=e.target.closest('button[data-day]');if(!b)return;selected=Number(b.dataset.day);renderToday();});
+$('chargeCheck').addEventListener('change',e=>{editDay(selected).charge=e.target.checked;save();renderSwitcher();renderToday();});
+$('activityCheck').addEventListener('change',e=>{editDay(selected).activity=e.target.checked;save();renderSwitcher();renderToday();toast('Отметка сохранена');});
+$('exerciseList').addEventListener('click',e=>{const b=e.target.closest('button[data-ex]');if(!b)return;const d=editDay(selected);d.sets=d.sets||{};const arr=d.sets[b.dataset.ex]||[];const i=Number(b.dataset.set),delta=Number(b.dataset.delta);const exDef=workouts[selected%7].exercises.find(x=>x.id===b.dataset.ex);const initial=exDef.target[Math.floor(selected/7)];const newval=Math.max(0,Math.min(999,(arr[i]===undefined?(delta>0?initial-1:initial+1):Number(arr[i]))+delta));arr[i]=newval;d.sets[b.dataset.ex]=arr;save();renderToday();});
+for(const [field,id,max] of [['stepsInput','steps',100000],['sleepInput','sleep',24],['weightInput','weight',400]]){$(field).addEventListener('input',e=>{const val=e.target.value;if(val===''){delete editDay(selected)[id];save();return}const num=Number(val);if(!Number.isFinite(num)||num<0||num>max)return;editDay(selected)[id]=num;save();});}
+$('noteInput').addEventListener('input',e=>{editDay(selected).note=e.target.value;save();});
+$('moodButtons').addEventListener('click',e=>{const b=e.target.closest('button[data-mood]');if(!b)return;const d=editDay(selected);const n=Number(b.dataset.mood);d.mood=d.mood===n?null:n;save();renderToday();});
+$('testInputs').addEventListener('input',e=>{if(!e.target.matches('input.test'))return;const w=e.target.dataset.week,kind=e.target.dataset.kind;data.tests[w]=data.tests[w]||{};if(e.target.value==='')delete data.tests[w][kind];else if(Number(e.target.value)>=0&&Number(e.target.value)<=300)data.tests[w][kind]=Number(e.target.value);save();});
+document.querySelectorAll('.nav').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+$('settingsButton').addEventListener('click',()=>switchView('settings'));
+$('exportButton').addEventListener('click',()=>{const text=JSON.stringify({app:'moy-turnik',exportedAt:new Date().toISOString(),...data},null,2);const url=URL.createObjectURL(new Blob([text],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`moy-turnik-backup-${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('Резервная копия создана');});
+$('importButton').addEventListener('click',()=>$('importFile').click());
+$('importFile').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>1e6)throw Error('Слишком большой файл');const parsed=JSON.parse(await file.text());if(!parsed||parsed.version!==1||!parsed.days||!parsed.tests||Array.isArray(parsed.days))throw Error('Неверный формат резервной копии');if(!confirm('Заменить все текущие записи данными из резервной копии?'))return;data={version:1,days:parsed.days,tests:parsed.tests};save();switchView('today');toast('Записи восстановлены');}catch(err){alert('Не удалось восстановить данные: '+err.message);}finally{e.target.value='';}});
+$('resetButton').addEventListener('click',()=>{if(confirm('Удалить ВСЕ отмеченные тренировки и записи? Это нельзя отменить без резервной копии.')){data=empty();save();switchView('today');toast('Все отметки удалены');}});
+if(!storageAvailable){const p=document.createElement('p');p.textContent='Внимание: браузер не разрешает сохранять данные. Открой приложение через HTTPS-сайт в обычном Safari.';p.style='background:#563534;padding:12px;border-radius:13px;color:#ffe1de;font-size:13px;';document.querySelector('.app').prepend(p);}
+renderToday();
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
+})();
+</script>
+</body>
+</html>
