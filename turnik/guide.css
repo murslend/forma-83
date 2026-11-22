@@ -1,0 +1,24 @@
+.guide-trigger{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;padding:1px 0 2px;border:0;background:none;color:var(--text);min-height:44px;justify-content:center}
+.guide-trigger strong{font-size:16px;line-height:1.28}
+.guide-affordance{font-size:12px;color:var(--sea);text-decoration:underline;text-underline-offset:3px;font-weight:750}
+.guide-trigger:focus-visible,.charge-guide-list button:focus-visible{outline:2px solid var(--lime);outline-offset:3px}
+.charge-guide-list{display:flex;flex-direction:column;gap:3px}
+.charge-guide-list button{padding:10px 3px;min-height:44px;background:transparent;border:0;border-bottom:1px solid var(--line);color:var(--text);font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left}
+.charge-guide-list button:last-child{border:0}
+.charge-guide-list em{font-size:11px;font-style:normal;color:var(--sea);white-space:nowrap;font-weight:700}
+.guide-dialog{width:min(94vw,540px);max-height:min(89dvh,800px);border:1px solid #547569;border-radius:22px;background:#142727;color:var(--text);box-shadow:0 28px 95px #000c;padding:0;margin:auto;overflow-y:auto}
+.guide-dialog::backdrop{background:#030f0edb;backdrop-filter:blur(4px)}
+.guide-panel{padding:22px 20px calc(22px + env(safe-area-inset-bottom))}
+.guide-top{display:flex;gap:16px;align-items:flex-start;justify-content:space-between}
+.guide-top h2{margin:9px 0 0;line-height:1.2;font-size:24px}
+.guide-close{background:#24453d;border:1px solid #5b786c;color:#e9f3ed;width:41px;height:41px;min-width:41px;border-radius:12px;font-size:24px}
+.guide-dialog h3{color:var(--sea);font-size:14px;margin:20px 0 7px}
+.guide-steps{margin:11px 0 5px;padding-left:25px}
+.guide-steps li{font-size:14px;line-height:1.55;margin-bottom:12px;padding-left:2px}
+.guide-steps li::marker{font-weight:800;color:var(--lime)}
+.guide-copy{font-size:13px;line-height:1.62;color:#d1ded7;margin:5px 0}
+.guide-hint{background:#213b32;padding:13px 14px;border-radius:14px;margin-top:18px}
+.guide-hint h3{margin:0 0 5px}
+.guide-done{margin-top:16px}
+body.guide-open{overflow:hidden}
+@media(prefers-reduced-motion:reduce){.guide-dialog{scroll-behavior:auto}}

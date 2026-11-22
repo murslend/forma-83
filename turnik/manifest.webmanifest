@@ -1,7 +1,7 @@
 {
-  "name": "Мой турник — тренировки дома",
-  "short_name": "Мой турник",
-  "description": "4 недели тренировок с собственным весом",
+  "name": "bodytur — домашние тренировки",
+  "short_name": "bodytur",
+  "description": "Тренировки с собственным весом, турник, зарядка и прогресс за 4 недели",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
