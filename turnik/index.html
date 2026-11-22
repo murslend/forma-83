@@ -9,7 +9,8 @@
   <meta name="apple-mobile-web-app-title" content="bodytur">
   <meta name="description" content="Личный трекер домашних тренировок на 4 недели: турник, отжимания, зарядка и прогресс.">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="icon-bodytur-192.png?v=2">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-bodytur-192.png?v=2">
   <title>bodytur · тренировки дома</title>
 <style>
 :root { color-scheme: dark; --bg:#0c191a;--surface:#142627;--surface2:#1c3232;--line:#304546;--text:#f4f6ee;--muted:#a0b2ae;--lime:#c7f36e;--sea:#80d8c3;--yellow:#f9d68e;--black:#102018;--danger:#ffafa4; }
@@ -21,7 +22,8 @@ button { cursor:pointer; }
 button:focus-visible,input:focus-visible { outline:2px solid var(--lime);outline-offset:3px; }
 .app { max-width:600px;margin:0 auto;padding:0 18px calc(106px + env(safe-area-inset-bottom)); }
 .top { padding:calc(21px + env(safe-area-inset-top)) 0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px; }
-.brand { font-size:14px; font-weight:850;letter-spacing:.16em; color:var(--lime); }
+.brand {display:flex;align-items:center;gap:10px; font-size:15px; font-weight:850;letter-spacing:.12em; color:var(--lime);}
+.brand-icon{width:38px;height:38px;object-fit:cover;border-radius:10px;box-shadow:0 0 18px #78e7ac25;flex-shrink:0;}
 .sub-brand { color:var(--muted);font-size:12px;margin-top:5px; }
 .icon-button { width:44px;height:44px;border-radius:15px;background:var(--surface2);border:1px solid var(--line);color:var(--text);font-size:21px; }
 .hero { padding:25px 22px 23px;position:relative;overflow:hidden;border-radius:28px;background:radial-gradient(circle at 90% 5%,#385b47 1%,transparent 52%),linear-gradient(145deg,#22372f,#183331);border:1px solid #38554d; }
@@ -116,7 +118,7 @@ button.danger{color:#ffd0c9;border:1px solid #a05e57;background:#422b2a;border-r
 </head>
 <body>
 <div class="app">
-  <header class="top"><div><div class="brand">bodytur<span aria-hidden="true"> ●</span></div><div class="sub-brand" id="cycleRange">23 ноября — 20 декабря 2026</div></div><button class="icon-button" type="button" id="settingsButton" aria-label="Настройки">⚙</button></header>
+  <header class="top"><div><div class="brand"><img class="brand-icon" src="icon-bodytur-192.png?v=2" alt="" width="38" height="38"><span>bodytur</span></div><div class="sub-brand" id="cycleRange">23 ноября — 20 декабря 2026</div></div><button class="icon-button" type="button" id="settingsButton" aria-label="Настройки">⚙</button></header>
   <div id="todayView">
     <section class="hero"><div class="eyebrow" id="heroWeek">НЕДЕЛЯ 1 / 4</div><h1 id="heroTitle">Сегодня — твой день</h1><p id="heroSub">План на день, зарядка и прогресс в одном месте.</p><div class="hero-stats"><div><strong id="heroCharges">0/28</strong><span>дней с зарядкой</span></div><div><strong id="heroTrainings">0/12</strong><span>силовых тренировок</span></div></div></section>
     <div class="week-switch" id="weekSwitch" aria-label="Выбор недели"></div><div class="cycle-bar"><button class="cycle-btn" id="prevCycle" type="button" aria-label="Предыдущие 4 недели">‹ Раньше</button><span id="cycleLabel">Цикл 1</span><button class="cycle-btn" id="nextCycle" type="button" aria-label="Следующие 4 недели">Позже ›</button></div>
